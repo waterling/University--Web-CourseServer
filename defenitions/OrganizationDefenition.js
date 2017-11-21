@@ -20,7 +20,7 @@ const Organization = connection.define('Organization', {
     },
     typeOfOrganization: {
         type: DataTypes.ENUM,
-        values: ['legal','semi-legal','illegal']
+        values: ['legal', 'semi-legal', 'illegal']
     },
     strongWords: {
         type: DataTypes.TEXT

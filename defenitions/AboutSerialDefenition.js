@@ -18,7 +18,7 @@ const AboutSerial = connection.define('AboutSerial', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    imgURL:{
+    imgURL: {
         type: DataTypes.TEXT
     },
     trailerURL: {

@@ -1,11 +1,9 @@
 'use strict';
 
-const News = require('../defenitions/NewsDefenition');
+const Stimulants = require('../defenitions/StimulantDefenition');
 
-const Sequelize = require('sequelize');
-
-News.prototype.getAllNews = function () {
-    News.findAll()
+Stimulants.prototype.getAllStimulants = function () {
+    Stimulants.findAll()
         .then(value => {
             let temp = new Array(value.length);
             let i = 0;
@@ -26,8 +24,8 @@ News.prototype.getAllNews = function () {
     });
 };
 
-News.prototype.getLastNews = function (num) {
-    News.findAll({limit: num, order: [['createdAt', 'DESC']]})
+Stimulants.prototype.getStimulant = function (num) {
+    Stimulants.findAll({where: {id: num}})
         .then(value => {
             let temp = new Array(value.length);
             let i = 0;
@@ -49,10 +47,10 @@ News.prototype.getLastNews = function (num) {
     });
 };
 
-News.prototype.addNews = function (jsonNews) {
-    News.create(JSON.parse(jsonNews))
+Stimulants.prototype.addStimulant = function (jsonStimulant) {
+    Stimulants.create(JSON.parse(jsonStimulant))
         .then(news => {
-            if (news === undefined) {
+            if (!news) {
                 return {status: undefined};
             }
             return {status: 'success'};
@@ -62,10 +60,10 @@ News.prototype.addNews = function (jsonNews) {
         });
 };
 
-News.prototype.updateNews = function (jsonNews) {
-    let temp = JSON.parse(jsonNews);
+Stimulants.prototype.updateStimulant = function (jsonStimulant) {
+    let temp = JSON.parse(jsonStimulant);
     console.log(temp);
-    News.update({
+    Stimulants.update({
         title: temp.title,
         content: temp.content,
         imgURL: temp.imgURL
@@ -74,4 +72,4 @@ News.prototype.updateNews = function (jsonNews) {
     });
 
 };
-module.exports = News;
+module.exports = Stimulants;

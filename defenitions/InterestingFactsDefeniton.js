@@ -24,7 +24,7 @@ const CharsHistory = connection.define('CharsHistory', {
 
 });
 
-Characters.hasMany(CharsHistory,{foreignKey:'orgId', sourceKey:'id'});
+Characters.hasMany(CharsHistory, {foreignKey: 'orgId', sourceKey: 'id'});
 
 CharsHistory.sync();
 module.exports = CharsHistory;

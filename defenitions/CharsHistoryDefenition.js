@@ -28,8 +28,8 @@ const CharsHistory = connection.define('CharsHistory', {
 
 });
 
-Characters.hasMany(CharsHistory,{foreignKey:'orgId', sourceKey:'id'});
-OnlineSeries.hasMany(CharsHistory,{foreignKey:'seriesId', sourceKey:'id'});
+Characters.hasMany(CharsHistory, {foreignKey: 'orgId', sourceKey: 'id'});
+OnlineSeries.hasMany(CharsHistory, {foreignKey: 'seriesId', sourceKey: 'id'});
 
 CharsHistory.sync();
 module.exports = CharsHistory;

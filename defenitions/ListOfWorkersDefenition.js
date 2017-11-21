@@ -26,8 +26,8 @@ const ListOfWorkers = connection.define('ListOfWorkers', {
 
 });
 
-Characters.hasMany(ListOfWorkers,{foreignKey:'orgId', sourceKey:'id'});
-Organizations.hasMany(ListOfWorkers,{foreignKey:'organizationId', sourceKey:'id'});
+Characters.hasMany(ListOfWorkers, {foreignKey: 'orgId', sourceKey: 'id'});
+Organizations.hasMany(ListOfWorkers, {foreignKey: 'organizationId', sourceKey: 'id'});
 
 ListOfWorkers.sync();
 module.exports = ListOfWorkers;

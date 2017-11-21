@@ -19,8 +19,8 @@ const OrganizationsRelationship = connection.define('OrganizationsRelationship',
         allowNull: false
     },
     type: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.ENUM,
+        values: ['enemy', 'friend']
     },
     duration: {
         type: DataTypes.STRING,
@@ -29,8 +29,8 @@ const OrganizationsRelationship = connection.define('OrganizationsRelationship',
 
 });
 
-Organizations.hasMany(OrganizationsRelationship,{foreignKey:'orgId1', sourceKey:'id'});
-Organizations.hasMany(OrganizationsRelationship,{foreignKey:'orgId2', sourceKey:'id'});
+Organizations.hasMany(OrganizationsRelationship, {foreignKey: 'orgId1', sourceKey: 'id'});
+Organizations.hasMany(OrganizationsRelationship, {foreignKey: 'orgId2', sourceKey: 'id'});
 
 OrganizationsRelationship.sync();
 module.exports = OrganizationsRelationship;

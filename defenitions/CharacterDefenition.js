@@ -31,7 +31,7 @@ const Character = connection.define('Character', {
     imgURL: {
         type: DataTypes.TEXT
     },
-    about:{
+    about: {
         type: DataTypes.TEXT
     },
     strongWords: {

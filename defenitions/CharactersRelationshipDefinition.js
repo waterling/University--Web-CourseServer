@@ -19,8 +19,8 @@ const CharactersRelationship = connection.define('CharactersRelationship', {
         allowNull: false
     },
     type: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.ENUM,
+        values: ['enemy', 'friend']
     },
     duration: {
         type: DataTypes.STRING,
@@ -29,8 +29,8 @@ const CharactersRelationship = connection.define('CharactersRelationship', {
 
 });
 
-Characters.hasMany(CharactersRelationship,{foreignKey:'orgId1', sourceKey:'id'});
-Characters.hasMany(CharactersRelationship,{foreignKey:'orgId2', sourceKey:'id'});
+Characters.hasMany(CharactersRelationship, {foreignKey: 'orgId1', sourceKey: 'id'});
+Characters.hasMany(CharactersRelationship, {foreignKey: 'orgId2', sourceKey: 'id'});
 
 CharactersRelationship.sync();
 module.exports = CharactersRelationship;

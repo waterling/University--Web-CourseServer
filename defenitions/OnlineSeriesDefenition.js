@@ -18,7 +18,7 @@ const OnlineSeries = connection.define('OnlineSeries', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    imgURL:{
+    imgURL: {
         type: DataTypes.TEXT,
     },
     src: {

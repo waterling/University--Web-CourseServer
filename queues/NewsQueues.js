@@ -3,7 +3,6 @@
 const amqp = require('amqplib/callback_api');
 
 
-
 class NewsQueues {
 
     doResponseNews(orderId, data) {
@@ -15,9 +14,7 @@ class NewsQueues {
                 const qName = 'news_' + orderId;
 
 
-
                 ch.assertQueue(qName, {durable: false, autoDelete: true});
-
 
 
                 ch.sendToQueue(qName, new Buffer(JSON.stringify(data)));
@@ -31,9 +28,7 @@ class NewsQueues {
     };
 
 
-
 }
-
 
 
 module.exports = NewsQueues;

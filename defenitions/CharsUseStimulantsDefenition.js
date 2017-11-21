@@ -21,13 +21,13 @@ const CharsUseStimulants = connection.define('CharsUseStimulants', {
     },
     howOften: {
         type: DataTypes.ENUM,
-        values: ['often','periodically','rarely'],
+        values: ['often', 'periodically', 'rarely'],
     }
 
 });
 
-Characters.hasMany(CharsUseStimulants,{foreignKey:'orgId', sourceKey:'id'});
-Stimulants.hasMany(CharsUseStimulants,{foreignKey:'stimulantId', sourceKey:'id'});
+Characters.hasMany(CharsUseStimulants, {foreignKey: 'orgId', sourceKey: 'id'});
+Stimulants.hasMany(CharsUseStimulants, {foreignKey: 'stimulantId', sourceKey: 'id'});
 
 CharsUseStimulants.sync();
 module.exports = CharsUseStimulants;

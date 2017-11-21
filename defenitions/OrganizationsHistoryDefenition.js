@@ -24,7 +24,7 @@ const OrganizationHistory = connection.define('OrganizationHistory', {
 
 });
 
-Organizations.hasMany(OrganizationHistory,{foreignKey:'orgId', sourceKey:'id'});
+Organizations.hasMany(OrganizationHistory, {foreignKey: 'orgId', sourceKey: 'id'});
 
 OrganizationHistory.sync();
 module.exports = OrganizationHistory;
