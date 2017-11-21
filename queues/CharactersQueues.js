@@ -2,30 +2,16 @@
 
 const amqp = require('amqplib/callback_api');
 
-
-class NewsQueues {
-
-    doResponseNews(newsId, data) {
-
+class CharactersQueues {
+    doResponseCharacters(charId, data) {
         amqp.connect('amqp://localhost', function (err, conn) {
-
             conn.createChannel(function (err, ch) {
-
-                const qName = 'news_' + newsId;
-
-
+                const qName = 'chars_' + charId;
                 ch.assertQueue(qName, {durable: false, autoDelete: true});
-
                 ch.sendToQueue(qName, new Buffer(JSON.stringify(data)));
-
             })
-
         });
-
     };
-
-
 }
 
-
-module.exports = NewsQueues;
+module.exports = CharactersQueues;

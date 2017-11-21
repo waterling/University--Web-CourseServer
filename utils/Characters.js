@@ -139,9 +139,11 @@ Character.prototype.getByType = function (charId, type) {
 Character.prototype.getEnemies = function (id) {
     Character.prototype.getByType(id, 'enemy');
 };
+
 Character.prototype.getFriends = function (id) {
     Character.prototype.getByType(id, 'friend');
 };
+
 Character.prototype.getHistory = function (id) {
     CharsHistory.findAll({where: {charId: id}})
         .then(value => {
@@ -164,6 +166,7 @@ Character.prototype.getHistory = function (id) {
 
     });
 };
+
 Character.prototype.getInterestingFacts = function (id) {
     InterestingFact.findAll({where: {charId: id}})
         .then(value => {

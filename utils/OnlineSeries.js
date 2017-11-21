@@ -3,14 +3,13 @@
 const OnlineSeries = require('../defenitions/OnlineSeriesDefenition');
 
 OnlineSeries.prototype.getAllSeries = function () {
-    OnlineSeries.findAll()
+    return OnlineSeries.findAll()
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            let temp = [];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
+            return temp;
         }).catch(error => {
 
         return {
@@ -25,13 +24,11 @@ OnlineSeries.prototype.getAllSeries = function () {
 };
 
 OnlineSeries.prototype.getSeason = function (num) {
-    OnlineSeries.findAll({where: {numOfSeazon: num}})
+    return OnlineSeries.findAll({where: {numOfSeazon: num}})
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            let temp = [];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
             return temp;
         }).catch(error => {
@@ -48,7 +45,7 @@ OnlineSeries.prototype.getSeason = function (num) {
 };
 
 OnlineSeries.prototype.addSeries = function (jsonSeries) {
-    OnlineSeries.create(JSON.parse(jsonSeries))
+    return OnlineSeries.create(JSON.parse(jsonSeries))
         .then(news => {
             if (!news) {
                 return {status: undefined};
@@ -61,14 +58,12 @@ OnlineSeries.prototype.addSeries = function (jsonSeries) {
 };
 
 OnlineSeries.prototype.updateSeries = function (jsonSeries) {
-    let temp = JSON.parse(jsonSeries);
-    console.log(temp);
-    OnlineSeries.update({
-        title: temp.title,
-        content: temp.content,
-        imgURL: temp.imgURL
-    }, {where: {id: temp.id}}).then((result) => {
-        console.log(result);
+    return OnlineSeries.update(JSON.parse(jsonSeries), {where: {id: temp.id}}).then((result) => {
+        if (result){
+            return 'success';
+        }else{
+            return 'this element doesn\'t exist';
+        }
     });
 
 };

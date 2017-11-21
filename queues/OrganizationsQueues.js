@@ -3,20 +3,21 @@
 const amqp = require('amqplib/callback_api');
 
 
-class NewsQueues {
+class OrganizationsQueues {
 
-    doResponseNews(newsId, data) {
+    doResponseOrganizations(osId, data) {
 
         amqp.connect('amqp://localhost', function (err, conn) {
 
             conn.createChannel(function (err, ch) {
 
-                const qName = 'news_' + newsId;
+                const qName = 'org_' + osId;
 
 
                 ch.assertQueue(qName, {durable: false, autoDelete: true});
 
                 ch.sendToQueue(qName, new Buffer(JSON.stringify(data)));
+
 
             })
 
@@ -28,4 +29,4 @@ class NewsQueues {
 }
 
 
-module.exports = NewsQueues;
+module.exports = OrganizationsQueues;

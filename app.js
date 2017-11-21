@@ -1,41 +1,21 @@
-const News = require('./utils/News');
-
-// const news = new News;
-
-const bodyParser = require('body-parser');
-
-const NewsQueues = require('./queues/NewsQueues');
-
-const newsQueues = new NewsQueues;
-
-const charRel =  require('./defenitions/CharactersRelationshipDefinition');
 
 const app = require('./connections/ExpressConnect');
 
-
-
-const RESPONSE_TO_CLIENT = 'Ваш запрос обрабатывается';
-
+//const bodyParser = require('body-parser'); // use for json
 // app.use(bodyParser.json());
 
-app.get('/news/:orderId', function (req, res) {
-    let rel = new charRel;
 
-    res.send(RESPONSE_TO_CLIENT);
+const newsRoute = require('./route/NewsRoute');
+app.use('/news', newsRoute);
 
-    const data = 'data from server';
+const onlineSeriesRoute = require('./route/OnlineSeriesRoute');
+app.use('/online', onlineSeriesRoute);
 
-    let news = new News;
-    console.log(news.updateNews('{ "id" : 76, "title": "New Title", "content": "New content", "imgURL": "New imgURL"}'));
+const charactersRoute = require('./route/CharactersRoute');
+app.use('/chars', charactersRoute);
 
-    newsQueues.doResponseNews(req.params.orderId, data);
-
-});
-
-
-app.delete('/news/:newsId',function (req, res) {
-
-});
+const organizationsRoute = require('./route/OrganizationsRoute');
+app.use('/org', organizationsRoute);
 
 
 

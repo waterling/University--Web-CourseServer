@@ -1,16 +1,10 @@
 const config = require('../../etc/config.json');
 
-
-
 const cors = require('cors');
 
 const express = require('express');
 
-
-
 const app = express();
-
-
 
 app.listen(config.serverPort, function () {
 
@@ -18,10 +12,6 @@ app.listen(config.serverPort, function () {
 
 });
 
-
-
 app.use(cors());
-
-
 
 module.exports = app;

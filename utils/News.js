@@ -2,39 +2,29 @@
 
 const News = require('../defenitions/NewsDefenition');
 
-const Sequelize = require('sequelize');
-
+// +
 News.prototype.getAllNews = function () {
-    News.findAll()
+    return News.findAll()
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            console.log('__________FindAllNews__________');
+            let temp=[];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
-        }).catch(error => {
-
-        return {
-
-            status: 'error',
-
-            data: error
-
-        }
-
-    });
+            return (temp);
+        });
 };
 
+// +
 News.prototype.getLastNews = function (num) {
-    News.findAll({limit: num, order: [['createdAt', 'DESC']]})
+    return News.findAll({limit: num, order: [['createdAt', 'DESC']]})
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            console.log('__________FindLastNews__________');
+            let temp =[];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
+            console.log(temp);
             return temp;
         }).catch(error => {
 
@@ -49,8 +39,9 @@ News.prototype.getLastNews = function (num) {
     });
 };
 
+// +
 News.prototype.addNews = function (jsonNews) {
-    News.create(JSON.parse(jsonNews))
+    return News.create(JSON.parse(jsonNews))
         .then(news => {
             if (news === undefined) {
                 return {status: undefined};
@@ -62,16 +53,28 @@ News.prototype.addNews = function (jsonNews) {
         });
 };
 
+// +
 News.prototype.updateNews = function (jsonNews) {
     let temp = JSON.parse(jsonNews);
-    console.log(temp);
-    News.update({
-        title: temp.title,
-        content: temp.content,
-        imgURL: temp.imgURL
-    }, {where: {id: temp.id}}).then((result) => {
-        console.log(result);
+    return News.update(temp, {where: {id: temp.id}}).then((result) => {
+        if (result){
+            return 'success';
+        }else{
+            return 'this element doesn\'t exist';
+        }
     });
 
 };
+
+// +
+News.prototype.deleteNews = function (id) {
+    return News.destroy({where:{id:id}}).then((result)=>{
+        if (result){
+            return 'success';
+        }else{
+            return 'this element doesn\'t exist';
+        }
+    });
+};
+
 module.exports = News;
