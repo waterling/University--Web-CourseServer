@@ -1,0 +1,34 @@
+{
+  "app": {
+    "host": "localhost",
+    "port": 8023,
+    "schema": "http",
+    "url": "http://domain.tld"
+  },
+
+  "session": {
+    "secret": "it:demo:secret",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
+  },
+
+  "memcached": {
+    "hosts": ["127.0.0.1:11211"],
+    "prefix": "it:demo:023:"
+  },
+
+  "auth": {
+    "fb": {
+      "app_id": 0,
+      "secret": "secret"
+    },
+    "vk": {
+      "app_id": 6268829,
+      "secret": "VoH9dbXW3YMjnMnTE2Hm"
+    }
+  }
+}
