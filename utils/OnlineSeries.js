@@ -24,7 +24,7 @@ OnlineSeries.prototype.getAllSeries = function () {
 };
 
 OnlineSeries.prototype.getSeason = function (num) {
-    return OnlineSeries.findAll({where: {numOfSeazon: num}})
+    return OnlineSeries.findAll({where: {numOfSeazon: num}, order: [['numOfSer', 'DESC']]})
         .then(value => {
             let temp = [];
             value.map(element => {
@@ -32,15 +32,10 @@ OnlineSeries.prototype.getSeason = function (num) {
             });
             return temp;
         }).catch(error => {
-
         return {
-
             status: 'error',
-
             data: error
-
         }
-
     });
 };
 
@@ -54,6 +49,29 @@ OnlineSeries.prototype.addSeries = function (jsonSeries) {
         })
         .catch(error => {
             return {status: error};
+        });
+};
+
+OnlineSeries.prototype.getLastSeries = function (num) {
+    return OnlineSeries.findAll({limit: num, order: [['numOfSeazon', 'DESC'],['numOfSer', 'DESC']]})
+        .then(value => {
+            console.log('__________FindLastSeries__________');
+            let temp =[];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            console.log(temp);
+            return temp;
+        }).catch(error => {
+
+            return {
+
+                status: 'error',
+
+                data: error
+
+            }
+
         });
 };
 

@@ -17,14 +17,24 @@ router.use(function timeLog(req, res, next) {
 //get all and get season
 router.get('/:id', function (req, res) {
     let onlineSeries = new OnlineSeries;
-    if (req.query.numOfSeazon) {
-        onlineSeries.getSeason(req.query.numOfSeazon).then(data => {
-            onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
+    console.log(req.query);
+    if (req.query.numOfSeason) {
+        onlineSeries.getSeason(req.query.numOfSeason).then(data => {
+            console.log('Get season: '+req.query.numOfSeason);
+            res.send(data);
+            // onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
         })
     } else {
-        onlineSeries.getAllSeries().then(data => {
-            onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
-        })
+        if (req.query.count){
+            console.log('Взять последние: ' + req.query.count);
+            onlineSeries.getLastSeries(parseInt(req.query.count)).then(data => {
+                res.send(data);
+            });
+        }else{
+            onlineSeries.getAllSeries().then(data => {
+                onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
+            })
+        }
     }
 });
 

@@ -76,5 +76,27 @@ News.prototype.deleteNews = function (id) {
         }
     });
 };
+News.prototype.getNewsWithOffset =function (offset, num) {
+    return News.findAll({limit: num, offset: offset, order: [['createdAt', 'DESC']]})
+        .then(value => {
+            console.log('__________Find__________');
+            let temp =[];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            console.log(temp);
+            return temp;
+        }).catch(error => {
+
+            return {
+
+                status: 'error',
+
+                data: error
+
+            }
+
+        });
+};
 
 module.exports = News;

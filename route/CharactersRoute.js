@@ -15,7 +15,14 @@ router.use(function timeLog(req, res, next) {
 
 //get all, one,
 router.get('/:id',function (req, res) {
-
+    let chars = new Characters;
+    console.log('Get param id (chars with offset): ' + req.params.id);
+    if(req.query.count && req.query.offset){
+        chars.getCharactersWithOffset(parseInt(req.query.offset), parseInt(req.query.count)).then(data => {
+            console.log(data);
+            res.send(data);
+        });
+    }
 });
 
 router.delete('/:id',function (req, res) {

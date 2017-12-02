@@ -17,17 +17,27 @@ router.use(function timeLog(req, res, next) {
 router.get('/:id', function (req, res) {
     let news = new News;
     console.log('Get param id: ' + req.params.id);
-    if (req.query.count) {
-        console.log('Взять последние: ' + req.query.count);
-        news.getLastNews(parseInt(req.query.count)).then(data => {
-            newsQueues.doResponseNews(req.params.id, data);
+    if(req.query.count && req.query.offset){
+        console.log('Взять последние co сдвигом : ' + req.query.count);
+        news.getNewsWithOffset(parseInt(req.query.offset), parseInt(req.query.count)).then(data => {
+            res.send(data);
         });
-    } else {
-        news.getAllNews().then(data => {
-            console.log('Взятые даннаые (getAllNews): ' + data);
-            newsQueues.doResponseNews(req.params.id, data);
-        });
+    }else{
+        if (req.query.count) {
+            console.log('Взять последние: ' + req.query.count);
+            news.getLastNews(parseInt(req.query.count)).then(data => {
+                res.send(data);
+                newsQueues.doResponseNews(req.params.id, data);
+            });
+        } else {
+            news.getAllNews().then(data => {
+                res.send(data);
+                console.log('Взятые даннаые (getAllNews): ' + data);
+                newsQueues.doResponseNews(req.params.id, data);
+            });
+        }
     }
+
 });
 
 //delete news by id in query +

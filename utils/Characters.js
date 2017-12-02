@@ -31,6 +31,28 @@ Character.prototype.getAllCharacters = function () {
     });
 };
 
+Character.prototype.getCharactersWithOffset = function (offset, num) {
+    return Character.findAll({limit: num, offset: offset, order: [['firstName', 'DESC']]})
+        .then(value => {
+            console.log('__________FindCharsWithOffset__________');
+            let temp = [];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            console.log(temp);
+            return temp;
+        }).catch(error => {
+
+            return {
+
+                status: 'error',
+
+                data: error
+
+            }
+
+        });
+};
 Character.prototype.getCharacter = function (num) {
     Character.findAll({where: {id: num}})
         .then(value => {

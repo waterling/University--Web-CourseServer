@@ -32,5 +32,5 @@ const Users = connection.define('Users', {
     updatedAt: DataTypes.DATE
 
 });
-Character.sync();
+Users.sync();
 module.exports = Users;
