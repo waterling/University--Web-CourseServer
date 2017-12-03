@@ -8,14 +8,14 @@ const OrganizationsRelationships = require('../defenitions/OrganizationsRelation
 const sequelize = require('sequelize');
 
 Organizations.prototype.getAllOrganizations = function () {
-    Organizations.findAll()
+    return Organizations.findAll()
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            let temp = [];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues)
             });
+            console.log('All Organizations: '+JSON.stringify(temp));
+            return temp;
         }).catch(error => {
 
         return {

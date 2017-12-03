@@ -2,6 +2,26 @@
 
 const News = require('../defenitions/NewsDefenition');
 
+News.prototype.getNews = function (id) {
+    return News.findAll({where: {id: id}})
+        .then(value => {
+            let temp = [];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            return temp;
+        }).catch(error => {
+
+        return {
+
+            status: 'error',
+
+            data: error
+
+        }
+
+    });
+};
 // +
 News.prototype.getAllNews = function () {
     return News.findAll()

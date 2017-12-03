@@ -15,7 +15,12 @@ router.use(function timeLog(req, res, next) {
 
 //get all, one,
 router.get('/:id',function (req, res) {
-
+    const organizations = new Organizations;
+    organizations.getAllOrganizations()
+        .then(data => {
+            res.send(data);
+            console.log('Взятые даннаые (getAllOrganizations): ' + data);
+    });
 });
 
 router.delete('/:id',function (req, res) {

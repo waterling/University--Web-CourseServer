@@ -30,11 +30,18 @@ router.get('/:id', function (req, res) {
                 newsQueues.doResponseNews(req.params.id, data);
             });
         } else {
-            news.getAllNews().then(data => {
-                res.send(data);
-                console.log('Взятые даннаые (getAllNews): ' + data);
-                newsQueues.doResponseNews(req.params.id, data);
-            });
+            if(req.query.id){
+                news.getNews(req.query.id).then(data=>{
+                    res.send(data);
+                    console.log('Отправлен полный контент Id: '+ req.query.id);
+                })
+            }else{
+                news.getAllNews().then(data => {
+                    res.send(data);
+                    console.log('Взятые даннаые (getAllNews): ' + data);
+                    newsQueues.doResponseNews(req.params.id, data);
+                });
+            }
         }
     }
 

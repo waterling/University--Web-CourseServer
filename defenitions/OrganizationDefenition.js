@@ -18,6 +18,9 @@ const Organization = connection.define('Organization', {
         type: DataTypes.TEXT,
         allowNull: false
     },
+    imgURL: {
+        type: DataTypes.TEXT,
+    },
     typeOfOrganization: {
         type: DataTypes.ENUM,
         values: ['legal', 'semi-legal', 'illegal']
