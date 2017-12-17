@@ -7,11 +7,11 @@ const connection = require('../connections/DataBaseConnect');
 const Users = connection.define('Users', {
     id: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         autoIncrement: true,
     },
     email: {
         type: DataTypes.STRING,
-        primaryKey: true,
         allowNull: false
     },
     firstName: {
@@ -26,7 +26,7 @@ const Users = connection.define('Users', {
     },
     admin: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        // allowNull: false
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE

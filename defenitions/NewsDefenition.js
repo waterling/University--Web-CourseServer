@@ -14,11 +14,18 @@ const News = connection.define('News', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+    shortText: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     content: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
     imgURL: {
+        type: DataTypes.TEXT
+    },
+    design: {
         type: DataTypes.TEXT
     },
     createdAt: DataTypes.DATE,

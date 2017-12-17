@@ -16,6 +16,7 @@ app.use('/chars', charactersRoute);
 const organizationsRoute = require('./route/OrganizationsRoute');
 app.use('/org', organizationsRoute);
 
+
 /*
 const signUpRoute = require('./route/SignUpRoute');
 app.use('/signup',signUpRoute);

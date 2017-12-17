@@ -38,7 +38,7 @@ User.prototype.deleteUser = function (email) {
 };
 
 User.prototype.getUser = function (email) {
-    User.findOne({where: {email: email}})
+    return User.findOne({where: {email: email}})
         .then(value => {
             let temp = [];
             value.map(element => {
@@ -51,6 +51,25 @@ User.prototype.getUser = function (email) {
                 data: error
         }
     });
+};
+User.prototype.getUserById = function (id) {
+    return User.findOne({where: {id: id}})
+        .then(value => {
+            let temp = [];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            return temp;
+        }).catch(error => {
+            return {
+                status: 'error',
+                data: error
+        }
+    });
+};
+
+User.prototype.validPassword = function (password) {
+    return true;
 };
 
 module.exports = User;

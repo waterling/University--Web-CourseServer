@@ -1,6 +1,6 @@
 'use strict';
 
-const config = require('../../etc/config.json');
+const config = require('../etc/config.json');
 
 const Sequelize = require('sequelize');
 

@@ -85,4 +85,25 @@ OnlineSeries.prototype.updateSeries = function (jsonSeries) {
     });
 
 };
+
+OnlineSeries.prototype.getSeriesById = function (id) {
+    return OnlineSeries.findAll({where: {id: id}})
+        .then(value => {
+            let temp = [];
+            value.map(element => {
+                temp.push(element.dataValues);
+            });
+            return temp;
+        }).catch(error => {
+
+            return {
+
+                status: 'error',
+
+                data: error
+
+            }
+
+        });
+};
 module.exports = OnlineSeries;

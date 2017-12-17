@@ -54,13 +54,11 @@ Character.prototype.getCharactersWithOffset = function (offset, num) {
         });
 };
 Character.prototype.getCharacter = function (num) {
-    Character.findAll({where: {id: num}})
+    return Character.findAll({where: {id: num}})
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            let temp = [];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
             return temp;
         }).catch(error => {

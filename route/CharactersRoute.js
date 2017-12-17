@@ -22,6 +22,13 @@ router.get('/:id',function (req, res) {
             console.log(data);
             res.send(data);
         });
+    }else {
+        if (req.query.id) {
+            chars.getCharacter(req.query.id).then(data => {
+                res.send(data);
+                console.log('Отправлен полный контент Id: ' + req.query.id);
+            })
+        }
     }
 });
 

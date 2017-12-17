@@ -2,7 +2,7 @@
 
 
 
-const config = require('../../etc/config.json');
+const config = require('../etc/config.json');
 
 const amqp = require('amqplib/callback_api');
 

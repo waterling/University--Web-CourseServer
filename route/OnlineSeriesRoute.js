@@ -31,9 +31,16 @@ router.get('/:id', function (req, res) {
                 res.send(data);
             });
         }else{
-            onlineSeries.getAllSeries().then(data => {
-                onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
-            })
+            if (req.query.id){
+                console.log('Взять по иду: ' + req.query.id);
+                onlineSeries.getSeriesById(parseInt(req.query.id)).then(data => {
+                    res.send(data);
+                });
+            }else{
+                onlineSeries.getAllSeries().then(data => {
+                    onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
+                })
+            }
         }
     }
 });
