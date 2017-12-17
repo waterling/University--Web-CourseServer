@@ -16,14 +16,10 @@ app.use('/chars', charactersRoute);
 const organizationsRoute = require('./route/OrganizationsRoute');
 app.use('/org', organizationsRoute);
 
+const authRoute = require('./route/AuthRoute');
+app.use('/auth', authRoute);
 
-/*
-const signUpRoute = require('./route/SignUpRoute');
-app.use('/signup',signUpRoute);
-*/
 
-/*const authRoute = require('./route/AuthRoute');
-authRoute(app);*/
 
 
 

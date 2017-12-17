@@ -14,19 +14,30 @@ const Users = connection.define('Users', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    name: {
+        type: DataTypes.STRING,
+    },
     firstName: {
         type: DataTypes.STRING,
     },
     surname: {
         type: DataTypes.STRING,
     },
-    passwordSha1: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    admin: {
+    salt: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    isAdmin: {
         type: DataTypes.BOOLEAN,
-        // allowNull: false
+        allowNull: false,
+        defaultValue: false
+    },
+    avatarURL: {
+        type: DataTypes.STRING
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE

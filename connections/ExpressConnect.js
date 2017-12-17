@@ -1,5 +1,4 @@
 const config = require('../etc/config.json');
-const passport = require('passport');
 const cors = require('cors');
 const flash = require('connect-flash');
 const morgan = require('morgan');
@@ -10,23 +9,36 @@ const session = require('express-session');
 
 const app = express();
 
-app.use(cors());
-require('../Auth/passport')(passport);
+app.use(cors({credentials: true, origin: `${config.clientHost}:${config.clientPort}`}));
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser()); // get information from html forms
-app.set('view engine', 'ejs'); // set up ejs for templating
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
-require('../route/auth')(app,passport);
+app.use(bodyParser.json()); // get information from html forms
+
+const MySQLStore = require('express-mysql-session')(session);
+
+const configMS = {
+    user: config.database.login,
+    password: config.database.password,
+    host: config.database.host,
+    port: config.database.port,
+    database: config.database.name
+};
+
+const sessionStore = new MySQLStore(configMS);
+
+app.use(session({
+    secret: config.session.secret,
+    key: config.session.key,
+    cookie: config.session.cookie,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore
+}));
+
+
+
+
 require('../download/Images')(app);
 app.listen(config.serverPort, function () {
-
     console.log('App started on ' + config.serverPort + ' port!');
-
-});/*
-app.use(session());*/
-/*app.use(passport.initialize());
-app.use(passport.session());*/
+});
 module.exports = app;

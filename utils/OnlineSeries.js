@@ -2,6 +2,9 @@
 
 const OnlineSeries = require('../defenitions/OnlineSeriesDefenition');
 
+const User = require('../defenitions/UserDefinition');
+const ViewedSeriesDefenition = require('../defenitions/ViewedSeriesDefenition');
+
 OnlineSeries.prototype.getAllSeries = function () {
     return OnlineSeries.findAll()
         .then(value => {
@@ -41,8 +44,8 @@ OnlineSeries.prototype.getSeason = function (num) {
 
 OnlineSeries.prototype.addSeries = function (jsonSeries) {
     return OnlineSeries.create(JSON.parse(jsonSeries))
-        .then(news => {
-            if (!news) {
+        .then(series => {
+            if (!series) {
                 return {status: undefined};
             }
             return {status: 'success'};
@@ -87,23 +90,48 @@ OnlineSeries.prototype.updateSeries = function (jsonSeries) {
 };
 
 OnlineSeries.prototype.getSeriesById = function (id) {
-    return OnlineSeries.findAll({where: {id: id}})
+    return OnlineSeries.find({where: {id: id}})
         .then(value => {
-            let temp = [];
-            value.map(element => {
-                temp.push(element.dataValues);
-            });
-            return temp;
+            return value;
         }).catch(error => {
-
             return {
-
                 status: 'error',
-
                 data: error
-
             }
-
         });
 };
+
+OnlineSeries.prototype.getSeriesByIdForUser = function (id, uid) {
+    return ViewedSeriesDefenition.find({include:[{model: OnlineSeries, as: 'series', where: { id: id }}], where: { userId:uid} })
+        .then(value => {
+            if(value){
+                console.log("getSeriesByIdForUser: "+JSON.stringify(value));
+                return value;
+            }else {
+                return ViewedSeriesDefenition.create({seriesId:id, userId: uid, time:0}).then(series=>{
+                    console.log("Created Viewed: "+JSON.stringify(series));
+                    return ViewedSeriesDefenition.find({include:[{model: OnlineSeries, as: 'series', where: { id: id }}], where: { userId:uid} }).then(value=>{
+                        return value;
+                    });
+                })
+            }
+        }).catch(error => {
+            console.log(error);
+            return {
+                status: 'error',
+                data: error
+            }
+        });
+};
+
+OnlineSeries.prototype.updateTimeForUser = function (id, uid, time) {
+    return ViewedSeriesDefenition.update({time: time}, {where: {seriesId: id, userId: uid}}).then((result) => {
+        if (result){
+            return 'success';
+        }else{
+            return 'this element doesn\'t exist';
+        }
+    });
+};
+
 module.exports = OnlineSeries;

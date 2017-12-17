@@ -5,8 +5,8 @@ const sequelize = require('sequelize');
 
 User.prototype.createUser = function (jsonUser) {
     return User.create(JSON.parse(jsonUser))
-        .then(news => {
-            if (news === undefined) {
+        .then(user => {
+            if (user === undefined) {
                 return {status: undefined};
             }
             return {status: 'success'};
@@ -52,6 +52,7 @@ User.prototype.getUser = function (email) {
         }
     });
 };
+
 User.prototype.getUserById = function (id) {
     return User.findOne({where: {id: id}})
         .then(value => {
@@ -68,8 +69,21 @@ User.prototype.getUserById = function (id) {
     });
 };
 
-User.prototype.validPassword = function (password) {
-    return true;
+User.prototype.checkUser = (email) => {
+    return User.findOne({
+        where: {
+            email: email,
+        }
+    })
 };
 
+User.prototype.isAdminUser = (isAdmin) => {
+    return User.findById(Number(isAdmin), {
+        attributes: ['isAdmin']
+    })
+};
+
+
+
+module.exports = User;
 module.exports = User;

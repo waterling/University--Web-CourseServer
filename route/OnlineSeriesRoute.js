@@ -31,15 +31,30 @@ router.get('/:id', function (req, res) {
                 res.send(data);
             });
         }else{
-            if (req.query.id){
-                console.log('Взять по иду: ' + req.query.id);
-                onlineSeries.getSeriesById(parseInt(req.query.id)).then(data => {
+            if (req.query.id && req.query.uid && req.query.time){
+                onlineSeries.updateTimeForUser(parseInt(req.query.id),parseInt(req.query.uid),parseInt(req.query.time)).then(data => {
+                    console.log("Update Time: "+ data);
                     res.send(data);
                 });
             }else{
-                onlineSeries.getAllSeries().then(data => {
-                    onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
-                })
+                if (req.query.id && req.query.uid){
+                    console.log('Взять по иду: ' + req.query.id+'Для пользователя: '+req.query.uid);
+                    onlineSeries.getSeriesByIdForUser(parseInt(req.query.id),parseInt(req.query.uid)).then(data => {
+                        res.send(data);
+                    });
+                }else{
+                    if (req.query.id ){
+                        console.log('Взять по иду: ' + req.query.id);
+                        onlineSeries.getSeriesById(parseInt(req.query.id)).then(data => {
+                            console.log("Это попросил: "+ JSON.stringify(req.session));
+                            res.send(data);
+                        });
+                    }else{
+                        onlineSeries.getAllSeries().then(data => {
+                            onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
+                        })
+                    }
+                }
             }
         }
     }

@@ -1,152 +1,168 @@
 const express = require('express');
-const Users = require('../utils/Users');
-const bodyParser = require('body-parser');
-const config = require("nconf");
-const passport = require('passport');
-const AuthLocalStrategy = require('passport-local').Strategy;
-const AuthFacebookStrategy = require('passport-facebook').Strategy;
-const AuthVKStrategy = require('passport-vkontakte').Strategy;
-
-let router = express.Router();
-router.use(bodyParser.urlencoded({extended: true}));
-router.use(bodyParser.json());
-//for fun:)
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
+const validator = require('validator');
+const user = new (require('../utils/Users'));
+const crypto = require('crypto');
+const sha1 = require('sha1');
+const router = new express.Router();
 
 
-passport.use('local', new AuthLocalStrategy(
-    function (username, password, done) {
-        if (username === "admin" && password === "admin") {
-            return done(null, {
-                username: "admin",
-                photoUrl: "url_to_avatar",
-                profileUrl: "url_to_profile"
-            });
-        }
+function validateSignupForm(payload) {
+    const errors = {};
+    let isFormValid = true;
+    let message = '';
 
-        return done(null, false, {
-            message: 'Неверный логин или пароль'
+    if (!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email)) {
+        isFormValid = false;
+        errors.email = 'Проверьте ваш email адрес.';
+    }
+
+    if (!payload || typeof payload.password !== 'string' || payload.password.trim().length < 8) {
+        isFormValid = false;
+        errors.password = 'Пароль должен содержать больше 8 символов.';
+    }
+
+    if (!payload || typeof payload.name !== 'string' || payload.name.trim().length === 0) {
+        isFormValid = false;
+        errors.name = 'Проверьте ваше имя.';
+    }
+
+    if (!isFormValid) {
+        message = 'Проверьте форму на ошибки.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+function validateLoginForm(payload) {
+    const errors = {};
+    let isFormValid = true;
+    let message = '';
+
+    if (!payload || typeof payload.email !== 'string' || payload.email.trim().length === 0) {
+        isFormValid = false;
+        errors.email = 'Проверьте ваш email адрес.';
+    }
+
+    if (!isFormValid) {
+        message = 'Проверьте форму на ошибки.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+router.post('/login', (req, res) => {
+    const validationResult = validateLoginForm(req.body);
+    if (!validationResult.success) {
+        return res.json({
+            success: false,
+            message: validationResult.message,
+            errors: validationResult.errors
         });
-    }
-));
-
-passport.use('facebook', new AuthFacebookStrategy({
-        clientID: config.get("auth:fb:app_id"),
-        clientSecret: config.get("auth:fb:secret"),
-        callbackURL: config.get("app:url") + "/auth/fb/callback",
-        profileFields: [
-            'id',
-            'displayName',
-            'profileUrl',
-            "username",
-            "link",
-            "gender",
-            "photos"
-        ]
-    },
-    function (accessToken, refreshToken, profile, done) {
-
-        //console.log("facebook auth: ", profile);
-
-        return done(null, {
-            username: profile.displayName,
-            photoUrl: profile.photos[0].value,
-            profileUrl: profile.profileUrl
-        });
-    }
-));
-
-passport.use('vk', new AuthVKStrategy({
-        clientID: config.get("auth:vk:app_id"),
-        clientSecret: config.get("auth:vk:secret"),
-        callbackURL: config.get("app:url") + "/auth/vk/callback"
-    },
-    function (accessToken, refreshToken, profile, done) {
-
-        //console.log("facebook auth: ", profile);
-
-        return done(null, {
-            username: profile.displayName,
-            photoUrl: profile.photos[0].value,
-            profileUrl: profile.profileUrl
-        });
-    }
-));
-
-passport.serializeUser(function (user, done) {
-    done(null, JSON.stringify(user));
-});
-
-
-passport.deserializeUser(function (data, done) {
-    try {
-        done(null, JSON.parse(data));
-    } catch (e) {
-        done(err)
-    }
-});
-
-module.exports = function (app) {
-    const passport = require('passport');
-
-    module.exports = function (app) {
-
-        app.get('/auth', function (req, res) {
-
-            if (req.isAuthenticated()) {
-                res.redirect('/');
-                return;
+    } else {
+        const email = req.body.email;
+        user.checkUser(email).then(value => {
+            if (value === null) {
+                return res.json({
+                    success: false,
+                    message: 'Пользователь не найден.',
+                    errors: validationResult.errors
+                });
+            } else {
+                if (value.password === req.body.password) {
+                    req.session.user = value.id;
+                    req.session.avatarURL = value.avatarURL;
+                    return res.json({success: true, data: req.session.user});
+                } else {
+                    return res.json({
+                        success: false,
+                        message: '',
+                        errors: {password: 'Проверьте ваш пароль.'}
+                    })
+                }
             }
-
-            res.render('auth', {
-                error: req.flash('error')
-            });
-        });
-
-        app.get('/sign-out', function (req, res) {
-            req.logout();
-            res.redirect('/');
-        });
-
-        app.post('/auth', passport.authenticate('local', {
-            successRedirect: '/',
-            failureRedirect: '/auth',
-            failureFlash: true })
-        );
-
-        app.get('/auth/fb',
-            passport.authenticate('facebook', {
-                scope: 'read_stream'
-            })
-        );
-
-        app.get('/auth/fb/callback',
-            passport.authenticate('facebook', {
-                successRedirect: '/',
-                failureRedirect: '/auth' })
-        );
-
-        app.get('/auth/vk',
-            passport.authenticate('vk', {
-                scope: ['friends']
-            }),
-            function (req, res) {
-                // The request will be redirected to vk.com
-                // for authentication, so
-                // this function will not be called.
-            });
-
-        app.get('/auth/vk/callback',
-            passport.authenticate('vk', {
-                failureRedirect: '/auth'
-            }),
-            function (req, res) {
-                // Successful authentication
-                //, redirect home.
-                res.redirect('/');
-            });
+        }).catch(error => {
+            console.log(error);
+        })
     }
-};
+});
+
+
+router.post('/signup', (req, res) => {
+    const validationResult = validateSignupForm(req.body);
+    if (!validationResult.success) {
+        return res.json({
+            success: false,
+            message: validationResult.message,
+            errors: validationResult.errors
+        });
+    } else {
+        const username = req.body.name;
+        const password = req.body.password;
+        const email = req.body.email;
+        user.checkUser(email).then(value => {
+            if (value === null) {
+                const salt = crypto.randomBytes(48)
+                    .toString('hex')
+                    .slice(0, 48);
+                let protectedPassword = sha1(sha1(password) + salt);
+                user.createUser(JSON.stringify({
+                    name: username,
+                    email: email,
+                    password: protectedPassword,
+                    salt: salt,
+                    isAdmin: false
+                })).then(value => {
+                    req.session.user = value.id;
+                    req.session.avatarURL = value.avatarURL;
+                    return res.json({success: true, data: req.session.user});
+                });
+            } else {
+                validationResult.errors.email = 'Этот email уже существует';
+                return res.json({
+                    success: false,
+                    message: 'Проверьте форму на ошибки.',
+                    errors: validationResult.errors
+                });
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+});
+
+router.post('/login/salt', (req, res) => {
+    const validationResult = validateLoginForm(req.body);
+    if (!validationResult.success) {
+        return res.json({
+            success: false,
+            message: validationResult.message,
+            errors: validationResult.errors
+        });
+    } else {
+        const email = req.body.email;
+        user.checkUser(email).then(value => {
+            if (value === null) {
+                return res.json({
+                    success: false,
+                    message: 'Пользователь не найден.',
+                    errors: validationResult.errors
+                });
+            } else {
+                return res.json({data: value.salt});
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+});
+
+
+module.exports = router;
