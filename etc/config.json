@@ -1,0 +1,32 @@
+{
+  "amqp_host": "amqp://localhost'",
+  "apiPrefix": "http://localhost:8080",
+  "serverPort": "3035",
+  "clientPort": "3005",
+  "clientHost": "http://192.168.43.170",
+  "serverIP": "192.168.43.170",
+  "folderForFiles":"C:\\Users\\vadim\\WebstormProjects\\CourseClient\\public\\resources",
+  "session": {
+    "secret": "bazinga",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
+  },
+  "database": {
+
+    "login": "course",
+
+    "password": "qwerty",
+
+    "name": "mysql",
+
+    "host": "localhost",
+
+    "port": "3306"
+
+  }
+
+}

@@ -53,6 +53,7 @@ Character.prototype.getCharactersWithOffset = function (offset, num) {
 
         });
 };
+
 Character.prototype.getCharacter = function (num) {
     return Character.findAll({where: {id: num}})
         .then(value => {
@@ -75,7 +76,7 @@ Character.prototype.getCharacter = function (num) {
 };
 
 Character.prototype.addCharacter = function (jsonCharacter) {
-    Character.create(JSON.parse(jsonCharacter))
+    return Character.create(JSON.parse(jsonCharacter))
         .then(news => {
             if (!news) {
                 return {status: undefined};
@@ -90,11 +91,7 @@ Character.prototype.addCharacter = function (jsonCharacter) {
 Character.prototype.updateCharacter = function (jsonCharacter) {
     let temp = JSON.parse(jsonCharacter);
     console.log(temp);
-    Character.update({
-        title: temp.title,
-        content: temp.content,
-        imgURL: temp.imgURL
-    }, {where: {id: temp.id}}).then((result) => {
+    return Character.update(temp, {where: {id: temp.id}}).then((result) => {
         console.log(result);
     });
 

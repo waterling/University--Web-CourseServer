@@ -34,6 +34,9 @@ const Character = connection.define('Character', {
     about: {
         type: DataTypes.TEXT
     },
+    design: {
+        type: DataTypes.TEXT
+    },
     strongWords: {
         type: DataTypes.TEXT
     },
