@@ -30,13 +30,11 @@ Organizations.prototype.getAllOrganizations = function () {
 };
 
 Organizations.prototype.getOrganization = function (num) {
-    Organizations.findAll({where: {id: num}})
+    return Organizations.findAll({where: {id: num}})
         .then(value => {
-            let temp = new Array(value.length);
-            let i = 0;
+            let temp = [];
             value.map(element => {
-                temp[i] = (element.dataValues);
-                i++;
+                temp.push(element.dataValues);
             });
             return temp;
         }).catch(error => {
@@ -53,7 +51,7 @@ Organizations.prototype.getOrganization = function (num) {
 };
 
 Organizations.prototype.addOrganization = function (jsonOrganization) {
-    Organizations.create(JSON.parse(jsonOrganization))
+    return Organizations.create(JSON.parse(jsonOrganization))
         .then(news => {
             if (!news) {
                 return {status: undefined};
@@ -68,11 +66,7 @@ Organizations.prototype.addOrganization = function (jsonOrganization) {
 Organizations.prototype.updateOrganization = function (jsonOrganization) {
     let temp = JSON.parse(jsonOrganization);
     console.log(temp);
-    Organizations.update({
-        title: temp.title,
-        content: temp.content,
-        imgURL: temp.imgURL
-    }, {where: {id: temp.id}}).then((result) => {
+    return Organizations.update(temp , {where: {id: temp.id}}).then((result) => {
         console.log(result);
     });
 

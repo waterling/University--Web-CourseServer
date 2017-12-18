@@ -18,6 +18,12 @@ const OnlineSeries = connection.define('OnlineSeries', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    about: {
+        type: DataTypes.TEXT,
+    },
+    design: {
+        type: DataTypes.TEXT,
+    },
     imgURL: {
         type: DataTypes.TEXT,
     },

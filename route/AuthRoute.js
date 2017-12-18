@@ -94,6 +94,20 @@ router.post('/login', (req, res) => {
     }
 });
 
+router.get('/isAdmin', (req, res) => {
+    const userId = req.session.user;
+    if (userId !== undefined) {
+        user.isAdminUser(userId).then(value => {
+            if (value.dataValues.isAdmin) {
+                res.send("Yes");
+            } else {
+                res.send("Permission denied");
+            }
+        });
+    } else {
+        res.send("Permission denied");
+    }
+});
 
 router.post('/signup', (req, res) => {
     const validationResult = validateSignupForm(req.body);
