@@ -18,6 +18,10 @@ const Organization = connection.define('Organization', {
         type: DataTypes.TEXT,
         allowNull: false
     },
+    design: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     imgURL: {
         type: DataTypes.TEXT,
     },
