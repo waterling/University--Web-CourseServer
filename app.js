@@ -1,7 +1,4 @@
-
 const app = require('./connections/ExpressConnect');
-//const bodyParser = require('body-parser'); // use for json
-// app.use(bodyParser.json());
 
 
 const newsRoute = require('./route/NewsRoute');
@@ -16,10 +13,8 @@ app.use('/chars', charactersRoute);
 const organizationsRoute = require('./route/OrganizationsRoute');
 app.use('/org', organizationsRoute);
 
+const mapRoute = require('./route/MapRoute');
+app.use('/map', mapRoute);
+
 const authRoute = require('./route/AuthRoute');
 app.use('/auth', authRoute);
-
-
-
-
-

@@ -86,4 +86,3 @@ User.prototype.isAdminUser = (isAdmin) => {
 
 
 module.exports = User;
-module.exports = User;
