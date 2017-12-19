@@ -79,7 +79,8 @@ OnlineSeries.prototype.getLastSeries = function (num) {
 };
 
 OnlineSeries.prototype.updateSeries = function (jsonSeries) {
-    return OnlineSeries.update(JSON.parse(jsonSeries), {where: {id: temp.id}}).then((result) => {
+
+    return OnlineSeries.update(JSON.parse(jsonSeries), {where: {id: JSON.parse(jsonSeries).id}}).then((result) => {
         if (result){
             return 'success';
         }else{

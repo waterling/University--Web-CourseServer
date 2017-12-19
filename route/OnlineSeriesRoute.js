@@ -2,7 +2,11 @@ const express = require('express');
 const OnlineSeries = require('../utils/OnlineSeries');
 const OnlineSeriesQueues = require('../queues/OnlineSeriesQueues');
 const bodyParser = require('body-parser');
+const config = require('../etc/config.json');
+const Busboy = require('busboy');
+const fs = require('fs');
 
+let imageURL;
 let onlineSeriesQueues = new OnlineSeriesQueues;
 let router = express.Router();
 router.use(bodyParser.urlencoded({extended: true}));
@@ -63,9 +67,38 @@ router.get('/:id', function (req, res) {
 
 router.post('/admin/:id', function (req, res) {
     let onlineSeries = new OnlineSeries;
-    onlineSeries.addSeries(req.body).then(data=>{
-        onlineSeriesQueues.doResponseOnlineSeries(req.params.id, data);
+    if (req.body) {
+        if (req.body.id) {
+            //update
+            let seriesForUpdate = req.body;
+            seriesForUpdate.imgURL = imageURL;
+            onlineSeries.updateSeries(JSON.stringify(seriesForUpdate)).then(data=>{
+                res.send(data);
+            });
+        } else {
+            //create
+            req.body.imgURL = imageURL;
+            onlineSeries.addSeries(JSON.stringify(req.body)).then(data=>{
+                res.send(data);
+            });
+        }
+    }
+});
+
+router.post('/uploadfile', (req, res) => {
+    const busboy = new Busboy({ headers: req.headers });
+    busboy.on('file', function(fieldname, file, filename) {
+        imageURL = fieldname + '-' + Date.now() + filename;
+        let saveTo = config.folderForFiles+ '/uploads/' + imageURL;
+        file.pipe(fs.createWriteStream(saveTo));
     });
+    busboy.on('finish', function() {
+        res.end('done');
+    });
+    res.on('close', function() {
+        req.unpipe(busboy);
+    });
+    req.pipe(busboy);
 });
 
 module.exports = router;
