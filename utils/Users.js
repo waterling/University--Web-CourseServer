@@ -56,11 +56,7 @@ User.prototype.getUser = function (email) {
 User.prototype.getUserById = function (id) {
     return User.findOne({where: {id: id}})
         .then(value => {
-            let temp = [];
-            value.map(element => {
-                temp.push(element.dataValues);
-            });
-            return temp;
+            return value;
         }).catch(error => {
             return {
                 status: 'error',

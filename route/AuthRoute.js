@@ -79,7 +79,7 @@ router.post('/login', (req, res) => {
                 if (value.password === req.body.password) {
                     req.session.user = value.id;
                     req.session.avatarURL = value.avatarURL;
-                    return res.json({success: true, data: req.session.user});
+                    return res.json({success: true, data: req.session});
                 } else {
                     return res.json({
                         success: false,
@@ -96,6 +96,7 @@ router.post('/login', (req, res) => {
 
 router.get('/isAdmin', (req, res) => {
     const userId = req.session.user;
+    console.log("isAdmin: "+ JSON.stringify(req.session));
     if (userId !== undefined) {
         user.isAdminUser(userId).then(value => {
             if (value.dataValues.isAdmin) {

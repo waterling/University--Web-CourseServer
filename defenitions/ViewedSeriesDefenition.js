@@ -19,7 +19,18 @@ const ViewedSeries = connection.define('ViewedSeries', {
     time: {
         type: DataTypes.DOUBLE,
         allowNull: false
-    }
+    },
+    fluid: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
+    },
+    duration: {
+        type: DataTypes.DOUBLE,
+    },
+    haveSeen: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 
 });
 

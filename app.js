@@ -18,3 +18,6 @@ app.use('/map', mapRoute);
 
 const authRoute = require('./route/AuthRoute');
 app.use('/auth', authRoute);
+
+const userRoute = require('./route/UserRoute');
+app.use('/user', userRoute);
